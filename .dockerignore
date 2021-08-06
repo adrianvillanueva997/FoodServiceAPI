@@ -1,0 +1,9 @@
+typings
+.env
+venv
+LICENSE
+README.md
+.vscode
+.github
+__pychache__
+.*pyc
