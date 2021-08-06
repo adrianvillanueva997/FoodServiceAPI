@@ -9,10 +9,10 @@ async def getBrandsbyBrand(brand: str):
 
 
 @router.post("api/v1/ubereats/outlet")
-async def createOutlet():
+async def create_outlet():
     pass
 
 
 @router.get("api/v1/ubereats/outlet")
-async def getOutlets():
+async def get_outlets():
     pass
