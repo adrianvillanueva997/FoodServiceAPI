@@ -1,2 +1,2 @@
 dev:
-	uvicorn server:app --reload
+	 uvicorn server:app --reload

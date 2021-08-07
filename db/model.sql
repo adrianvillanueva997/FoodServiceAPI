@@ -5,7 +5,7 @@
 -- Dumped from database version 13.3
 -- Dumped by pg_dump version 13.3
 
--- Started on 2021-08-05 13:33:44 UTC
+-- Started on 2021-08-07 15:21:49 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3018 (class 1262 OID 17228)
+-- TOC entry 3023 (class 1262 OID 17228)
 -- Name: FoodServices; Type: DATABASE; Schema: -; Owner: admin
 --
 
@@ -125,6 +125,56 @@ CREATE TABLE public.ub_outlet (
 ALTER TABLE public.ub_outlet OWNER TO admin;
 
 --
+-- TOC entry 3013 (class 0 OID 17229)
+-- Dependencies: 200
+-- Data for Name: ta_outlet; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.ta_outlet (outletid, name, address, country, phone, reviews) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3015 (class 0 OID 17264)
+-- Dependencies: 202
+-- Data for Name: ta_reviews; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.ta_reviews ("user", outletid, review, rate) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3014 (class 0 OID 17254)
+-- Dependencies: 201
+-- Data for Name: ta_user; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.ta_user ("user", likes, reviews, profile) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3017 (class 0 OID 17311)
+-- Dependencies: 204
+-- Data for Name: ub_menu; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.ub_menu (outletid, name, brand, price, volume) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3016 (class 0 OID 17308)
+-- Dependencies: 203
+-- Data for Name: ub_outlet; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.ub_outlet (outletid, country, name, address, reviews) FROM stdin;
+\.
+
+
+--
 -- TOC entry 2875 (class 2606 OID 17276)
 -- Name: ta_outlet ta_outlet_pk; Type: CONSTRAINT; Schema: public; Owner: admin
 --
@@ -178,7 +228,7 @@ ALTER TABLE ONLY public.ub_menu
     ADD CONSTRAINT ub_menu_fk FOREIGN KEY (outletid) REFERENCES public.ub_outlet(outletid);
 
 
--- Completed on 2021-08-05 13:33:44 UTC
+-- Completed on 2021-08-07 15:21:49 UTC
 
 --
 -- PostgreSQL database dump complete
