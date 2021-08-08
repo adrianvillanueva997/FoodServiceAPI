@@ -1,10 +1,7 @@
-import asyncpg
 from typing import Optional
 from fastapi import APIRouter
-from fastapi import responses
 from starlette.requests import Request
 from fastapi.responses import JSONResponse
-from fastapi.responses import Response
 
 from ....models.v1.outlet import Outlet
 from ....utils.config import limiter
@@ -24,7 +21,9 @@ router = APIRouter()
 async def create_outlet(request: Request, source: str, outlet: Outlet):
     """Creates an outlet given a datasource"""
     try:
-        if source is not None and (source != "ubereats" or source != "tripadvisor"):
+        if (
+            source is not None and (source == "ubereats" or source == "tripadvisor")
+        ) == False:
             raise InvalidSource()
         if outlet.reviews is not None and outlet.reviews < 0:
             raise NegativeReviews()
@@ -34,7 +33,6 @@ async def create_outlet(request: Request, source: str, outlet: Outlet):
             await create_ubereats_outlet(outlet)
         return JSONResponse(status_code=200, content={"message": "OK"})
     except Exception as exception:
-        print(exception)
         exception_management(exception)
 
 

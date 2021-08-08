@@ -5,7 +5,7 @@
 -- Dumped from database version 13.3
 -- Dumped by pg_dump version 13.3
 
--- Started on 2021-08-07 15:21:49 UTC
+-- Started on 2021-08-08 15:50:56 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,16 +19,16 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3023 (class 1262 OID 17228)
--- Name: FoodServices; Type: DATABASE; Schema: -; Owner: admin
+-- TOC entry 3030 (class 1262 OID 17228)
+-- Name: FoodServicesTEST; Type: DATABASE; Schema: -; Owner: admin
 --
 
-CREATE DATABASE "FoodServices" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
+CREATE DATABASE "FoodServicesTEST" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'en_US.utf8';
 
 
-ALTER DATABASE "FoodServices" OWNER TO admin;
+ALTER DATABASE "FoodServicesTEST" OWNER TO admin;
 
-\connect "FoodServices"
+\connect "FoodServicesTEST"
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -84,9 +84,9 @@ ALTER TABLE public.ta_reviews OWNER TO admin;
 
 CREATE TABLE public.ta_user (
     "user" character varying NOT NULL,
-    likes bigint DEFAULT 0 NOT NULL,
-    reviews bigint DEFAULT 0 NOT NULL,
-    profile character varying NOT NULL
+    likes bigint DEFAULT 0,
+    reviews bigint DEFAULT 0,
+    address character varying NOT NULL
 );
 
 
@@ -102,7 +102,7 @@ CREATE TABLE public.ub_menu (
     name character varying NOT NULL,
     brand character varying NOT NULL,
     price double precision NOT NULL,
-    volume bigint NOT NULL
+    volume character varying NOT NULL
 );
 
 
@@ -125,57 +125,71 @@ CREATE TABLE public.ub_outlet (
 ALTER TABLE public.ub_outlet OWNER TO admin;
 
 --
--- TOC entry 3013 (class 0 OID 17229)
+-- TOC entry 205 (class 1259 OID 17368)
+-- Name: vw_outlets; Type: VIEW; Schema: public; Owner: admin
+--
+
+CREATE VIEW public.vw_outlets AS
+ SELECT ta.outletid,
+    ta.name,
+    ta.address,
+    ta.country,
+    ta.phone,
+    ta.reviews,
+    'tripadvisor'::text AS source
+   FROM public.ta_outlet ta
+UNION ALL
+ SELECT ub.outletid,
+    ub.name,
+    ub.address,
+    ub.country,
+    ''::character varying AS phone,
+    ub.reviews,
+    'ubereats'::text AS source
+   FROM public.ub_outlet ub;
+
+
+ALTER TABLE public.vw_outlets OWNER TO admin;
+
+--
+-- TOC entry 3020 (class 0 OID 17229)
 -- Dependencies: 200
 -- Data for Name: ta_outlet; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.ta_outlet (outletid, name, address, country, phone, reviews) FROM stdin;
-\.
-
 
 --
--- TOC entry 3015 (class 0 OID 17264)
+-- TOC entry 3022 (class 0 OID 17264)
 -- Dependencies: 202
 -- Data for Name: ta_reviews; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.ta_reviews ("user", outletid, review, rate) FROM stdin;
-\.
-
 
 --
--- TOC entry 3014 (class 0 OID 17254)
+-- TOC entry 3021 (class 0 OID 17254)
 -- Dependencies: 201
 -- Data for Name: ta_user; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.ta_user ("user", likes, reviews, profile) FROM stdin;
-\.
 
 
 --
--- TOC entry 3017 (class 0 OID 17311)
+-- TOC entry 3024 (class 0 OID 17311)
 -- Dependencies: 204
 -- Data for Name: ub_menu; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.ub_menu (outletid, name, brand, price, volume) FROM stdin;
-\.
+
 
 
 --
--- TOC entry 3016 (class 0 OID 17308)
+-- TOC entry 3023 (class 0 OID 17308)
 -- Dependencies: 203
 -- Data for Name: ub_outlet; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.ub_outlet (outletid, country, name, address, reviews) FROM stdin;
-\.
-
-
 --
--- TOC entry 2875 (class 2606 OID 17276)
+-- TOC entry 2879 (class 2606 OID 17276)
 -- Name: ta_outlet ta_outlet_pk; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -184,7 +198,7 @@ ALTER TABLE ONLY public.ta_outlet
 
 
 --
--- TOC entry 2877 (class 2606 OID 17261)
+-- TOC entry 2881 (class 2606 OID 17261)
 -- Name: ta_user ta_user_pk; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -193,7 +207,16 @@ ALTER TABLE ONLY public.ta_user
 
 
 --
--- TOC entry 2879 (class 2606 OID 17318)
+-- TOC entry 2885 (class 2606 OID 17388)
+-- Name: ub_menu ub_menu_un; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.ub_menu
+    ADD CONSTRAINT ub_menu_un UNIQUE (outletid, name, brand, price, volume);
+
+
+--
+-- TOC entry 2883 (class 2606 OID 17318)
 -- Name: ub_outlet ub_outlet_pk; Type: CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -202,7 +225,7 @@ ALTER TABLE ONLY public.ub_outlet
 
 
 --
--- TOC entry 2880 (class 2606 OID 17282)
+-- TOC entry 2886 (class 2606 OID 17282)
 -- Name: ta_reviews ta_outlet_outlet; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -211,7 +234,7 @@ ALTER TABLE ONLY public.ta_reviews
 
 
 --
--- TOC entry 2881 (class 2606 OID 17287)
+-- TOC entry 2887 (class 2606 OID 17287)
 -- Name: ta_reviews ta_reviews_fk; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -220,7 +243,7 @@ ALTER TABLE ONLY public.ta_reviews
 
 
 --
--- TOC entry 2882 (class 2606 OID 17331)
+-- TOC entry 2888 (class 2606 OID 17331)
 -- Name: ub_menu ub_menu_fk; Type: FK CONSTRAINT; Schema: public; Owner: admin
 --
 
@@ -228,7 +251,7 @@ ALTER TABLE ONLY public.ub_menu
     ADD CONSTRAINT ub_menu_fk FOREIGN KEY (outletid) REFERENCES public.ub_outlet(outletid);
 
 
--- Completed on 2021-08-07 15:21:49 UTC
+-- Completed on 2021-08-08 15:50:56 UTC
 
 --
 -- PostgreSQL database dump complete
