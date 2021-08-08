@@ -3,18 +3,20 @@ services:
   postgres:
     container_name: foodService_postgres
     restart: unless-stopped
-    build: db/.
+    image: adrianvillanueva997/foodservice_db
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       # PGDATA: ./data/postgres
     ports:
-      - "5432:5432"
+      - "5432"
     restart: unless-stopped
   api:
     container_name: foodService_api
     restart: unless-stopped
-    build: .
+    image: adrianvillanueva997/foodservice_api
     env_file: .env
+    depends_on: 
+      - postgres
     ports:
       - "8000:8000"

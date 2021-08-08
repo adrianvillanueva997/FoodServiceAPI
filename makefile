@@ -3,7 +3,7 @@ dev:
 test:
 	pytest -v .
 prod:
-	uvicorn server:app --port 8000
+	uvicorn server:app --host 0.0.0.0 --port 8000
 docker-lint-api:
 	hadolint --ignore DL3018 --ignore DL3013 --ignore DL3019 Dockerfile
 docker-lint-db:
