@@ -6,7 +6,7 @@ RUN apk add --no-cache build-base && pip3 wheel -r requirements.txt
 
 FROM base as prod
 COPY --from=builder /build /wheels
-RUN apk add make && pip install -U pip && \
+RUN apk add make && pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir \
     -r /wheels/requirements.txt \
     -f /wheels && \
