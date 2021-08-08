@@ -1,9 +1,9 @@
 version: "3.1"
 services:
   postgres:
-    container_name: postgres_container
+    container_name: foodService_postgres
     restart: unless-stopped
-    image: test
+    build: db/.
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
@@ -11,3 +11,10 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+  api:
+    container_name: foodService_api
+    restart: unless-stopped
+    build: .
+    env_file: .env
+    ports:
+      - "8000:8000"
