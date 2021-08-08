@@ -39,6 +39,7 @@ async def create_outlet(request: Request, source: str, outlet: Outlet):
 @router.get("/api/v1/outlet/{source}")
 @limiter.limit("100/minute")
 async def get_outlets(request: Request, source: Optional[str]):
+    """Fetches all outlets given a datasource, it can be tripadvisor, ubereats or all."""
     try:
         if source == "all":
             response = await fetch_outlets()

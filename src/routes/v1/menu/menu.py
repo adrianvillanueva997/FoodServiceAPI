@@ -43,7 +43,7 @@ async def get_menu_by_price(request: Request, price: int):
 @router.get("/api/v1/menu/brand/{brand}")
 @limiter.limit("100/minute")
 async def get_menu_by_brand(request: Request, brand: str):
-    """Creates an outlet given a datasource"""
+    """Gets all outlets given a brand"""
     try:
         outlets = await find_outlet_by_brand(brand)
         if len(outlets) == 0:
