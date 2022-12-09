@@ -4,7 +4,7 @@ astroid==2.6.6
 asyncpg==0.23.0
 attrs==21.2.0
 black==21.7b0
-certifi==2021.5.30
+certifi==2022.12.7
 charset-normalizer==2.0.4
 click==8.0.1
 fastapi==0.68.0
